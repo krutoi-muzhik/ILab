@@ -40,17 +40,26 @@ int main () {
     printf ("enter ur a, b, c variables \n");
 
 
-    printf ("                       a = ");
+   printf ("                       a = ");
     double a = 0;
-    scanf ("%lf", &a);
+    while (scanf ("%lf", &a) != 1) {
+        printf ("input error, please enter real numbers \n                       a = ");
+        fflush (stdin);
+    }
 
     double b = 0;
     printf ("                       b = ");
-    scanf ("%lf", &b);
+    while (scanf ("%lf", &b) != 1) {
+        printf ("input error, please enter real numbers \n                       b = ");
+        fflush (stdin);
+    }
 
     double c = 0;
     printf ("                       c = ");
-    scanf ("%lf", &c);
+    while (scanf ("%lf", &c) != 1) {
+        printf ("input error, please enter real numbers \n                       c = ");
+        fflush (stdin);
+    }
 
     double x = 0;
     double x1 = 0;
