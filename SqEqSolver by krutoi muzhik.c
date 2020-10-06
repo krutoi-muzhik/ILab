@@ -1,24 +1,27 @@
 
 #include <stdio.h>
 #include <math.h>
-#include "TXLib.h"
 
 //-----------------------------------------------------------------------------
 
+int SolveLin (double b, double c, double* x1);
 
-int SolveLin (double a, double b, double* x);
+int SolveSq (double a, double b, double c, double* x1, double* x2);
 
-int SolveSq (double a, double b, double c, double* x, double* x1, double* x2);
+double DoublePow (double f, int g);
 
-bool IsZero (double* m);
+int IsZero (double m);
+
+int IsEqual (double i, double j);
 
 void SqEqSolver2020Test ();
 
+double InputTest ();
 
 //-----------------------------------------------------------------------------
 
 
-const long double MicroNum = 1e-6;
+const long double MicroKek = 1e-6;
 
 
 //-----------------------------------------------------------------------------
@@ -30,36 +33,43 @@ const long double MicroNum = 1e-6;
 int main () {
 
 
-
     //SqEqSolver2020Test ();
     //return 0;
 
 
 
-    printf ("welcome to SqEqSolver2020 by krutoi_muzhik \n");
+    printf ("\nwelcome to SqEqSolver2020 by krutoi_muzhik \n\n");
     printf ("enter ur a, b, c variables \n");
 
 
-   printf ("                       a = ");
-    double a = 0;
-    while (scanf ("%lf", &a) != 1) {
-        printf ("input error, please enter real numbers \n                       a = ");
-        fflush (stdin);
-    }
+    printf ("enter a:\n");
+ //   while (scanf ("%lf", & a) != 1) {
+ //       printf ("input error, please enter real numbers \n                       a = ");
+ //       fflush (stdin);
+ //   }
+    double a = InputTest ();
+    printf ("u entered a = %lf\n\n", a);
 
-    double b = 0;
-    printf ("                       b = ");
-    while (scanf ("%lf", &b) != 1) {
-        printf ("input error, please enter real numbers \n                       b = ");
-        fflush (stdin);
-    }
 
-    double c = 0;
-    printf ("                       c = ");
-    while (scanf ("%lf", &c) != 1) {
-        printf ("input error, please enter real numbers \n                       c = ");
-        fflush (stdin);
-    }
+
+    printf ("enter b:\n");
+ //   while (scanf ("%lf", & b) != 1) {
+ //       printf ("input error, please enter real numbers \n                       b = ");
+ //       fflush (stdin);
+ //   }
+    double b = InputTest ();
+    printf ("u entered b = %lf\n\n", b);
+
+
+    
+    printf ("enter c:\n");
+//    while (scanf ("%lf", & c) != 1) {
+//        printf ("input error, please enter real numbers \n                       c = ");
+//        fflush (stdin);
+//    }
+    double c = InputTest ();
+    printf ("u entered c = %lf\n\n", c);
+
 
     double x = 0;
     double x1 = 0;
@@ -68,16 +78,7 @@ int main () {
     double m = 0;
 
 
-    if (a != 0) {
-
-        n = SolveSq (a, b, c, & x, & x1, & x2);
-    }
-
-
-    if (a == 0) {
-
-        n = SolveLin (b, c, & x);
-    }
+    n = SolveSq (a, b, c, &x1, &x2);
 
 
     if (n == 0) {
@@ -100,33 +101,33 @@ int main () {
     if (n == 1){
 
 
-        if (IsZero (&x)){
+        if (IsZero (x1)) {
 
-            x = 0;
+            x1 = 0;
         }
 
         printf ("1 root \n");
-        printf ("x = %lf", x);
+        printf ("x = %lf\n", x1);
     }
 
 
     if (n == 2) {
 
 
-        if (IsZero (&x1)) {
+        if (IsZero (x1)) {
 
             x1 = 0;
         }
 
 
-        if (IsZero (&x2)) {
+        if (IsZero (x2)) {
 
             x2 = 0;
         }
 
-        printf ("2 roots \n");
-        printf ("x1 = %lf \n", x1);
-        printf ("x2 = %lf", x2);
+        printf ("2 roots\n");
+        printf ("x1 = %lf\n", x1);
+        printf ("x2 = %lf\n", x2);
     }
 }
 
@@ -134,22 +135,43 @@ int main () {
 //-----------------------------------------------------------------------------
 
 
-bool IsZero (double* m) {
+int IsZero (double m) {
 
-    return (fabs (*m) < MicroNum);
+    if (fabs (m) < MicroKek) {
+        return 1;
+    }
+
+    else {
+        return 0;
+    }
 }
 
 
 //-----------------------------------------------------------------------------
 
 
-int SolveLin (double a, double b, double* x) {
+int IsEqual (double i, double j) {
+
+    if (fabs (i - j) < MicroKek) {
+        return 1;
+    }
+
+    else {
+        return 0;
+    }
+}
+
+
+//-----------------------------------------------------------------------------
+
+
+int SolveLin (double b, double c, double* x1) {
 
 
 
-    if (IsZero (&a)) {
+    if (IsZero (b)) {
 
-        if (IsZero (&b)) {
+        if (IsZero (c)) {
 
             return -2;
         }
@@ -157,92 +179,182 @@ int SolveLin (double a, double b, double* x) {
 
         else {
 
-            return -1;
+            return 0;
         }
     }
 
 
-    if (!IsZero (&a)) {
+    if (!IsZero (b)) {
 
-        *x = ((-b) / a);
+        *x1 = ((-c) / b);
         return 1;
+    }
+}
+
+
+
+//-----------------------------------------------------------------------------
+
+
+int SolveSq (double a, double b, double c, double* x1, double* x2) {
+
+
+    if (!IsZero (a)) {
+
+        double d = ((b * b) - (4 * a * c));
+
+
+        if (IsZero (d)) {
+
+            *x1 = ((-b) / (2 * a));
+            return 1;
+        }
+
+
+        if (!IsZero (d)) {
+
+
+            if (d < 0) {
+
+                return 0;
+            }
+
+
+            if (d > 0) {
+
+                *x1 = (-b + sqrtf (d)) / (2 * a);
+                *x2 = (-b - sqrtf (d)) / (2 * a);
+                return 2;
+            }
+        }
+    }
+
+    if (IsZero (a)) {
+        int n = SolveLin (b, c, x1);
+        return n;
     }
 }
 
 
 //-----------------------------------------------------------------------------
 
+double InputTest () {
 
-int SolveSq (double a, double b, double c, double* x, double* x1, double* x2) {
-
-
-
-    double d = ((b * b) - (4 * a * c));
+    char inputek[100];
 
 
-    if (IsZero (&d)) {
-
-        *x = ((-b) / a);
-        return 1;
-    }
-
-
-    else {
+    int i = 0;
+    int t = 0;
+    int k = 0;
+    int l = 0;
+    double a = 0;
+    double b = NAN;
 
 
-        if (d < 0) {
+    while (1) {
+        
+        //gets (inputek);
+        scanf ("%s", &inputek);
+        //printf("111111111111111111111\n");
+        //printf("%s\n", &inputek[0]);
+        //printf("111111111111111111111\n");
 
-            return 0;
+        for (i = 0; inputek[i] != '\0'; i++) {
+
+            //printf ("1\n");
+
+            if (inputek[i] == '-') {
+                k++;
+                if (i != 0) {
+
+                    if (inputek[i - 1] == ' ') {
+                        l++;
+                    }
+
+                    if (inputek[i - 1] == '.') {
+                        t = 2;
+                    }
+                }
+
+                if (i == 0) {
+                    l++;
+                }
+            }
+
+            if (inputek[i] == ',') {
+                inputek[i] = '.';
+                t++;
+
+                if (i != 0) {
+                    if (inputek[i - 1] == ' ') {
+                        l++;
+                    }
+                }
+
+                if (i == 0) {
+                    l++;
+                }
+            }
+
+            else if (inputek[i] == '.') {
+                t++;
+                if (i != 0) {
+                    if (inputek[i - 1] == ' ') {
+                        l++;
+                    }
+                }
+
+                if (i == 0) {
+                    l++;
+                }
+            }
+
+            if ((inputek[i] != '0') && (inputek[i] != '1') && (inputek[i] != '2') && (inputek[i] != '3') && (inputek[i] != '4') && (inputek[i] != '5') && (inputek[i] != '6') && (inputek[i] != '7') && (inputek[i] != '8') && (inputek[i] != '9') && (inputek[i] != ' ') && (inputek[i] != '.') && (inputek[i] != '-')) {
+                t = 2;
+            }
+
+            if ((i != 0) && (inputek[i] == ' ') && ((inputek[i - 1] == '.') || (inputek[i - 1] == '-'))) {
+                if (l > 0) {
+                    l++;
+                }
+            }
+
+            //else {
+            //  l = 0;
+            //}
         }
 
 
-        if (d > 0) {
+        if ((t > 1) || (k > 1) || (l > 1)) {
+            printf ("check your input data and try again:\n");
+            k = 0;
+            t = 0;
+            l = 0;
+        }
 
-            *x1 = (-b + sqrt (d)) / (2 * a);
-            *x2 = (-b - sqrt (d)) / (2 * a);
-            return 2;
+
+        else {
+            sscanf (inputek, "%lf%lf", &a, &b);
+            //printf ("%lf\n%lf\n", a, b);
+
+            if (isnan (b)) {
+                break;
+            } 
+
+            else {
+                printf ("check your input data and try again:\n");
+                b = NAN;
+                t = 0;
+                l = 0;
+                k = 0;
+            }
         }
     }
+
+    return a;
 }
 
-void SqEqSolver2020Test() {
 
-    printf ("Tester mode ON: \n");
-
-    double x = 0;
-    int n = 0;
-    double x1 = 0;
-    double x2 = 0;
-
-    n = SolveLin (0, 0, &x);
-
-
-    if (n == -2) {
-
-        $g; printf ("Test 0 0 0 OK \n");
-    }
-
-
-    else {
-
-        $r; printf (" Test 0 0 0 BAD: \n SOlveLin(0, 0, ...): n = -2 expected, but n = %lf got", n);
-    }
-
-
-    n = SolveSq (1, 2, 3, &x, &x1, &x2);
-
-
-    if (n == 0) {
-
-        $g; printf ("Test 1 2 3 OK \n");
-    }
-
-
-    else {
-
-        $r; printf ("Test 1 2 3 BAD: \n SolveSq(1, 2, 3, ...): n = 0 expected, but n = %lf got", n);
-    }
-}
 
 
 
