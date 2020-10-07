@@ -14,7 +14,7 @@ int IsZero (double m);
 
 int IsEqual (double i, double j);
 
-void SqEqSolver2020Test ();
+void SolverTest ();
 
 double InputTest ();
 
@@ -33,7 +33,7 @@ const long double MicroKek = 1e-6;
 int main () {
 
 
-    //SqEqSolver2020Test ();
+    //void SolverTest ();
     //return 0;
 
 
@@ -354,6 +354,53 @@ double InputTest () {
     return a;
 }
 
+//-----------------------------------------------------------------------------
+
+void SolverTest () {
+
+    double TestA[]  = { 0.1, 0,   0.01};
+    double TestB[]  = {-0.2, 0,   0.01};
+    double TestC[]  = { 0.1, 0,   0.01};
+    int TestN[]     = { 1,  -2,   0   };
+    double TestX1[] = { 1,   NAN, NAN };
+    double TestX2[] = { NAN, NAN, NAN };
+
+    int Tests = sizeof (TestN) / sizeof (int);
+
+    int ResN[Tests];
+    double ResX1[Tests];
+    double ResX2[Tests];
+
+    for (int i = 0; i < Tests; i++) {
+
+        ResN[i] = SolveSq (TestA[i], TestB[i], TestC[i], &ResX1[i], &ResX2[i]);
+        switch (ResN[i]) {
+            case 1: if (IsEqual (ResX1[i], TestX1[i])) {
+                printf ("Test %d OK :-)\n", i + 1);
+            }
+            else {
+                printf ("Test %d very BAAD:\n X1 expected %lf, got %lf\n", i + 1, TestX1[i], ResX1[i]);
+            }
+            break;
+
+            case 2: if (IsEqual (ResX1[i], TestX1[i]) && IsEqual (ResX2[i], TestX2[i])) {
+                printf ("Test %d OK :-)\n", i + 1);
+            }
+            else {
+                printf ("Test %d very BAAD:\n X1 expected %lf, got %lf\n X2 expected %lf, got %lf\n", i + 1, TestX1, ResX1, TestX2, ResX2);
+            }
+            break;
+
+            default: if (IsEqual (TestN[i], ResN[i])){
+                printf ("Test %d OK :-)\n", i + 1);
+            }
+            else {
+                printf ("Test %d very BAAD:\n N expected %d, got %d\n", i + 1, TestN[i], ResN[i]);
+            }
+            break;
+        }
+    }
+}
 
 
 
